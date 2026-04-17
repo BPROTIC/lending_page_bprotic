@@ -103,7 +103,7 @@ const divisions = [
       </p>
 
       <h2 class="text-4xl md:text-5xl font-extrabold mb-4">
-        Roadmap Divisi Biprotik
+        Roadmap Divisi Bprotic
       </h2>
 
       <p class="text-gray-400">

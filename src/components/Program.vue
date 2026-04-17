@@ -33,7 +33,7 @@ import { Code, Brain, Palette } from 'lucide-vue-next'
         data-aos-delay="200"
         class="text-gray-400 max-w-2xl mx-auto mb-16"
       >
-        Biprotik menyediakan berbagai program untuk membantu mahasiswa mengembangkan kemampuan teknologi secara praktis dan profesional.
+        Bprotic menyediakan berbagai program untuk membantu mahasiswa mengembangkan kemampuan teknologi secara praktis dan profesional.
       </p>
 
       <!-- CARDS -->

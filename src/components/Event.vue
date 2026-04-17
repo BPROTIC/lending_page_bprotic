@@ -52,7 +52,7 @@ const events = [
       </h2>
 
       <p class="text-gray-400 max-w-2xl mx-auto mb-16 text-sm">
-        Biprotik rutin mengadakan berbagai kegiatan seperti workshop, seminar, 
+        Bprotic rutin mengadakan berbagai kegiatan seperti workshop, seminar, 
         dan pelatihan teknologi untuk meningkatkan skill mahasiswa.
       </p>
 

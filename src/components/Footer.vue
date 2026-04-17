@@ -14,7 +14,7 @@ import { Instagram, MessageCircle, Mail } from 'lucide-vue-next'
       <!-- BRAND -->
       <div>
         <h2 class="text-2xl font-extrabold bg-gradient-to-r from-blue-500 to-indigo-600 bg-clip-text text-transparent">
-          Biprotik
+          BPROTIC
         </h2>
 
         <p class="text-gray-400 mt-3 text-sm leading-relaxed">
@@ -75,7 +75,7 @@ import { Instagram, MessageCircle, Mail } from 'lucide-vue-next'
 
     <!-- COPYRIGHT -->
     <div class="relative text-center text-gray-500 mt-12 border-t border-white/10 pt-4 text-sm">
-      © 2026 Biprotik. All rights reserved.
+       Bprotic. All rights reserved.
     </div>
 
   </footer>

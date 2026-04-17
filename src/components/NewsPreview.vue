@@ -46,7 +46,7 @@ const news = [
       </h2>
 
       <p class="text-gray-400 text-sm">
-        Informasi terbaru kegiatan dan perkembangan Biprotik
+        Informasi terbaru kegiatan dan perkembangan Bprotic
       </p>
     </div>
 

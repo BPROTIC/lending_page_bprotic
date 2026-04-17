@@ -34,7 +34,7 @@
         data-aos="fade-up"
         data-aos-delay="200"
         class="text-gray-400 max-w-2xl mx-auto text-sm leading-relaxed">
-        Biprotik adalah Unit Kegiatan Mahasiswa yang berfokus pada pengembangan teknologi, 
+        Bprotic adalah Unit Kegiatan Mahasiswa yang berfokus pada pengembangan teknologi, 
         inovasi, dan keterampilan digital untuk mempersiapkan mahasiswa menghadapi era digital.
       </p>
 
