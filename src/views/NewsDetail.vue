@@ -3,7 +3,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { 
   ArrowLeft, Calendar, Users, Info, Flag, Image as ImageIcon,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, Share2
 } from 'lucide-vue-next'
 import { mockNews } from '../utils/mockData'
 
@@ -12,6 +12,7 @@ const router = useRouter()
 
 const news = ref(null)
 const isLoading = ref(false)
+const isCopied = ref(false)
 
 const fetchNewsDetail = async () => {
   isLoading.value = true
@@ -21,7 +22,6 @@ const fetchNewsDetail = async () => {
     if (result.success) {
       news.value = result.data
     } else {
-      // Fallback ke mock data jika API gagal atau sukses tapi data kosong
       const found = mockNews.find(item => item.id == route.params.id)
       news.value = found || null
     }
@@ -31,6 +31,28 @@ const fetchNewsDetail = async () => {
     news.value = found || null
   } finally {
     isLoading.value = false
+  }
+}
+
+const shareNews = () => {
+  const shareData = {
+    title: news.value?.title || 'Berita BPROTIC',
+    text: `Baca berita terbaru dari BPROTIC: ${news.value?.title}`,
+    url: window.location.href
+  }
+
+  // Jika browser mendukung fitur Share bawaan (terutama di HP)
+  if (navigator.share) {
+    navigator.share(shareData)
+      .catch((err) => console.log('Error sharing', err))
+  } else {
+    // Jika di Laptop/Browser yang tidak mendukung Share API, pakai Copy to Clipboard
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      isCopied.value = true
+      setTimeout(() => {
+        isCopied.value = false
+      }, 2000)
+    })
   }
 }
 
@@ -151,8 +173,15 @@ onMounted(() => {
                 </div>
 
                 <div class="pt-6 border-t border-white/10">
-                  <button @click="router.push('/news')" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl transition">
-                    Bagikan Berita
+                  <button 
+                    @click="shareNews" 
+                    :class="[
+                      'w-full py-3 rounded-xl transition text-sm font-bold flex items-center justify-center gap-2',
+                      isCopied ? 'bg-green-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'
+                    ]"
+                  >
+                    <Share2 v-if="!isCopied" size="18" />
+                    {{ isCopied ? 'Link Berhasil Disalin!' : 'Bagikan Berita' }}
                   </button>
                 </div>
 
