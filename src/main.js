@@ -11,7 +11,7 @@ const app = createApp(App)
 
 app.use(router)
 
-// INIT AOS (SETELAH APP SIAP)
+// INIT AOS
 AOS.init({
   duration: 800,
   once: true

@@ -1,28 +1,33 @@
 <script setup>
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { mockNews } from '../utils/mockData'
 
 const router = useRouter()
+const news = ref([])
+const isLoading = ref(true)
 
-const news = [
-  {
-    id: 1,
-    title: "Workshop Vue untuk Pemula",
-    date: "10 April 2026",
-    image: "/images/news1.jpg"
-  },
-  {
-    id: 2,
-    title: "Pelatihan Machine Learning",
-    date: "5 April 2026",
-    image: "/images/news2.jpg"
-  },
-  {
-    id: 3,
-    title: "Pengembangan IoT Project",
-    date: "1 April 2026",
-    image: "/images/news3.jpg"
+const fetchLatestNews = async () => {
+  isLoading.value = true
+  try {
+    const response = await fetch('/api/news')
+    const result = await response.json()
+    if (result.success && result.data.length > 0) {
+      news.value = result.data.slice(0, 3)
+    } else {
+      news.value = mockNews.slice(0, 3)
+    }
+  } catch (error) {
+    console.error('API Error, using mock data:', error)
+    news.value = mockNews.slice(0, 3)
+  } finally {
+    isLoading.value = false
   }
-]
+}
+
+onMounted(() => {
+  fetchLatestNews()
+})
 </script>
 
 <template>
@@ -51,7 +56,12 @@ const news = [
     </div>
 
     <!-- GRID -->
-    <div class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+    <div v-if="isLoading" class="text-center py-20 text-blue-400">
+      <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full mb-4"></div>
+      <p>Mengambil berita terbaru...</p>
+    </div>
+
+    <div v-else class="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
 
       <div 
         v-for="item in news" 
@@ -65,7 +75,7 @@ const news = [
         <div class="relative overflow-hidden">
 
           <img 
-            :src="item.image"
+            :src="item.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1000&auto=format&fit=crop'"
             class="w-full h-48 object-cover group-hover:scale-110 transition duration-500"
           />
 
@@ -73,7 +83,7 @@ const news = [
           <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition"></div>
 
           <!-- BADGE -->
-          <span class="absolute top-3 left-3 text-xs bg-blue-500 px-2 py-1 rounded-md">
+          <span class="absolute top-3 left-3 text-[10px] font-bold bg-blue-600 px-2 py-1 rounded-md uppercase tracking-tighter">
             News
           </span>
 
@@ -82,16 +92,21 @@ const news = [
         <!-- CONTENT -->
         <div class="p-5">
 
-          <p class="text-blue-400 text-xs mb-2">
-            {{ item.date }}
+          <p class="text-blue-400 text-[10px] font-semibold mb-2 uppercase">
+            {{ new Date(item.created_at || item.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
           </p>
 
-          <h3 class="text-lg font-semibold leading-snug group-hover:text-blue-400 transition">
+          <h3 class="text-lg font-bold leading-snug group-hover:text-blue-400 transition line-clamp-2">
             {{ item.title }}
           </h3>
 
+          <!-- ringkasan -->
+          <p class="text-xs text-gray-400 mt-2 line-clamp-2">
+            {{ item.content || 'Klik untuk melihat detail berita terbaru dari Biprotik...' }}
+          </p>
+
           <!-- LINE -->
-          <div class="w-8 h-[2px] bg-blue-500 mt-3 opacity-60 group-hover:w-12 transition-all"></div>
+          <div class="w-8 h-[2px] bg-blue-500 mt-4 opacity-60 group-hover:w-12 transition-all"></div>
 
         </div>
 

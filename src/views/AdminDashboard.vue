@@ -50,6 +50,30 @@ const isActive = (path) => route.path === path
           Kelola News
         </p>
 
+        <p 
+          class="menu"
+          :class="route.path.includes('/admin/class') && 'active'"
+          @click="router.push('/admin/class')"
+        >
+          Kelola Kelas
+        </p>
+
+        <p 
+          class="menu"
+          :class="route.path.includes('/admin/division') && 'active'"
+          @click="router.push('/admin/division')"
+        >
+          Kelola Divisi
+        </p>
+
+        <p 
+          class="menu"
+          :class="route.path.includes('/admin/user') && 'active'"
+          @click="router.push('/admin/user')"
+        >
+          Kelola User
+        </p>
+
       </div>
 
       <!-- LOGOUT -->

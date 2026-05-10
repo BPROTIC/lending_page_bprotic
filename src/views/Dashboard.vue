@@ -30,8 +30,9 @@ const pageTitle = computed(() => {
   if (route.path === '/dashboard') return 'Dashboard'
   if (route.path.includes('/dashboard/event')) return 'Event'
   if (route.path.includes('/dashboard/news')) return 'News'
+  if (route.path.includes('/dashboard/material')) return 'Materi Kuliah'
   if (route.path.includes('/dashboard/profile')) return 'Profile'
-  if (route.path.includes('/dashboard/certificate')) return 'Certificate' // 🔥 TAMBAHAN
+  if (route.path.includes('/dashboard/certificate')) return 'Certificate'
 
   return 'Dashboard'
 })
@@ -89,6 +90,13 @@ const isActive = (path) => route.path === path
           :class="['menu', route.path.includes('/dashboard/news') && 'active']"
         >
           News
+        </p>
+
+        <p 
+          @click="router.push('/dashboard/material')" 
+          :class="['menu', route.path.includes('/dashboard/material') && 'active']"
+        >
+          Materi
         </p>
 
         <p 

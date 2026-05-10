@@ -1,45 +1,53 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { ArrowLeft } from 'lucide-vue-next'
+import { mockNews } from '../utils/mockData'
 
 const router = useRouter()
 
 const search = ref('')
 const selectedCategory = ref('All')
+const isLoading = ref(false)
 
 const categories = ['All', 'Web Dev', 'Machine Learning', 'IoT']
 
-const news = ref([
-  {
-    id: 1,
-    title: "Workshop Vue",
-    category: "Web Dev",
-    date: "10 April 2026",
-    image: "/images/news1.jpg",
-    description: "Belajar Vue dasar"
-  },
-  {
-    id: 2,
-    title: "Pelatihan ML",
-    category: "Machine Learning",
-    date: "5 April 2026",
-    image: "/images/news2.jpg",
-    description: "Belajar ML"
-  },
-  {
-    id: 3,
-    title: "Project IoT",
-    category: "IoT",
-    date: "1 April 2026",
-    image: "/images/news3.jpg",
-    description: "Project sensor"
+const news = ref([])
+
+const fetchNews = async () => {
+  isLoading.value = true
+  try {
+    const response = await fetch('/api/news')
+    const result = await response.json()
+    if (result.success && result.data.length > 0) {
+      news.value = result.data
+    } else {
+      news.value = mockNews
+    }
+  } catch (error) {
+    console.error('Error fetching news, using mock data:', error)
+    news.value = mockNews
+  } finally {
+    isLoading.value = false
   }
-])
+}
+
+onMounted(() => {
+  fetchNews()
+})
+
+const goBack = () => {
+  if (window.history.length > 1) {
+    router.back()
+  } else {
+    router.push('/')
+  }
+}
 
 const filteredNews = computed(() => {
   return news.value.filter(item => {
     const matchSearch = item.title.toLowerCase().includes(search.value.toLowerCase())
-    const matchCategory = selectedCategory.value === 'All' || item.category === selectedCategory.value
+    const matchCategory = selectedCategory.value === 'All' 
     return matchSearch && matchCategory
   })
 })
@@ -47,6 +55,19 @@ const filteredNews = computed(() => {
 
 <template>
   <section class="relative min-h-screen py-28 px-6 bg-gradient-to-b from-blue-950 via-blue-900 to-black text-white overflow-hidden">
+    
+    <!-- 🔙 BACK BUTTON -->
+    <div class="max-w-6xl mx-auto mb-6 relative z-20">
+      <button 
+        @click="goBack"
+        class="flex items-center gap-2 text-gray-400 hover:text-white transition group"
+      >
+        <div class="p-2 rounded-full bg-white/5 border border-white/10 group-hover:bg-blue-500 group-hover:border-blue-400 transition">
+          <ArrowLeft size="18" />
+        </div>
+        <span class="text-sm font-medium">Kembali</span>
+      </button>
+    </div>
 
     <!-- 🔥 GLOW -->
     <div class="absolute top-0 left-0 w-72 h-72 bg-blue-500/20 blur-3xl rounded-full"></div>
@@ -93,7 +114,12 @@ const filteredNews = computed(() => {
     </div>
 
     <!-- GRID -->
-    <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+    <div v-if="isLoading" class="text-center py-20 text-blue-400">
+      <div class="animate-spin inline-block w-8 h-8 border-4 border-current border-t-transparent rounded-full mb-4"></div>
+      <p>Mengambil berita terbaru...</p>
+    </div>
+
+    <div v-else class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
 
       <div 
         v-for="item in filteredNews" 
@@ -105,7 +131,7 @@ const filteredNews = computed(() => {
         <!-- IMAGE -->
         <div class="overflow-hidden">
           <img 
-            :src="item.image" 
+            :src="item.image || 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=1000&auto=format&fit=crop'" 
             class="h-44 w-full object-cover hover:scale-110 transition duration-500"
           />
         </div>
@@ -114,15 +140,15 @@ const filteredNews = computed(() => {
         <div class="p-5">
 
           <p class="text-xs text-blue-400 mb-2">
-            {{ item.date }}
+            {{ new Date(item.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) }}
           </p>
 
-          <h2 class="font-semibold text-lg mb-2">
+          <h2 class="font-semibold text-lg mb-2 line-clamp-2">
             {{ item.title }}
           </h2>
 
-          <p class="text-gray-400 text-sm mb-4">
-            {{ item.description }}
+          <p class="text-gray-400 text-sm mb-4 line-clamp-3">
+            {{ item.content }}
           </p>
 
           <button 
@@ -136,6 +162,10 @@ const filteredNews = computed(() => {
 
       </div>
 
+    </div>
+
+    <div v-if="!isLoading && filteredNews.length === 0" class="text-center py-20 text-gray-500">
+      Belum ada berita yang tersedia.
     </div>
 
   </section>
