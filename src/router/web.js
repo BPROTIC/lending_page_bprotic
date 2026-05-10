@@ -1,9 +1,9 @@
 import Home from '../views/Home.vue'
 import Dashboard from '../views/Dashboard.vue'
 import AdminDashboard from '../views/AdminDashboard.vue'
-import MentorLayout from '../layouts/MentorLayout.vue'
-import PDDLayout from '../layouts/PDDLayout.vue'
-import StaffLayout from '../layouts/StaffLayout.vue'
+import MentorLayout from '../layouts/mentorlayout.vue'
+import PDDLayout from '../layouts/pddlayout.vue'
+import StaffLayout from '../layouts/stafflayout.vue'
 
 // 🔥 CHILD USER
 const DashboardHome = () => import('../views/dashboard/Home.vue')
@@ -58,7 +58,7 @@ export default [
     path: '/admin',
     component: AdminDashboard,
     children: [
-      { path: '', component: { template: '<div />' } },
+      { path: '', component: { render: () => null } },
       { path: 'event', component: AdminEvent },
       { path: 'news', component: AdminNews },
       { path: 'class', component: AdminClass },

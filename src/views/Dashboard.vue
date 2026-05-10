@@ -4,7 +4,6 @@ import { useRouter, useRoute } from 'vue-router'
 
 import SelectClass from '../components/SelectClass.vue'
 import BiodataForm from '../components/BiodataForm.vue'
-import DashboardHome from './dashboard/Home.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -153,13 +152,7 @@ const isActive = (path) => route.path === path
 
       <!-- 🔥 DASHBOARD -->
       <template v-else>
-
-        <!-- DEFAULT -->
-        <DashboardHome v-if="route.path === '/dashboard'" />
-
-        <!-- 🔥 ROUTER CHILD -->
-        <router-view v-else />
-
+        <router-view />
       </template>
 
     </div>
